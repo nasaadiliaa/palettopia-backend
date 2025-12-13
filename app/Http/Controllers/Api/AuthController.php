@@ -15,14 +15,14 @@ class AuthController extends Controller
     public function register(Request $req)
     {
         $data = $req->validate([
-            'name' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'phone' => 'nullable|string',
         ]);
 
         $user = User::create([
-            'name'     => $data['name'],
+            'full_name'     => $data['full_name'],
             'email'    => $data['email'],
             'phone'    => $data['phone'] ?? null,
             'role'     => 'customer',
@@ -75,7 +75,7 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $data = $request->validate([
-            'name'  => 'required|string|max:255',
+            'full_name'  => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
         ]);
         $user = $request->user();
