@@ -36,7 +36,7 @@ Route::get('/', function () {
 })->name('landing');
 
 // Auth routes (dihasilkan oleh laravel/ui)
-Auth::routes();
+// Auth::routes();
 
 // Optional: route legacy /home
 Route::get('/home', [HomeController::class, 'index'])
@@ -74,4 +74,4 @@ Route::view('/about', 'about')->name('about');
 
 use App\Http\Controllers\Auth\LogoutController;
 
-Route::post('/logout', LogoutController::class)->name('logout');
+// Route::post('/logout', LogoutController::class)->name('logout');

@@ -10,6 +10,32 @@ use Illuminate\Http\Request;
 
 class AnalysisController extends Controller
 {
+    /**
+     * =========================
+     * GET /api/history
+     * =========================
+     */
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        // kalau belum login / session hilang
+        if (!$user) {
+            return response()->json([], 200);
+        }
+
+        $history = AnalysisHistory::where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        return response()->json($history, 200);
+    }
+
+    /**
+     * =========================
+     * POST /api/analysis
+     * =========================
+     */
     public function store(Request $request, GeminiService $gemini)
     {
         $data = $request->validate([
@@ -20,6 +46,10 @@ class AnalysisController extends Controller
         ]);
 
         $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
         // === 1. CALL AI ===
         try {
@@ -33,11 +63,7 @@ class AnalysisController extends Controller
         }
 
         // === 2. PARSE AI RESPONSE ===
-        if (is_string($raw)) {
-            $ai = json_decode($raw, true);
-        } else {
-            $ai = $raw;
-        }
+        $ai = is_string($raw) ? json_decode($raw, true) : $raw;
 
         if (!is_array($ai) || empty($ai['palette_name'])) {
             return response()->json([

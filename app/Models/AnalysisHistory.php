@@ -14,21 +14,16 @@ class AnalysisHistory extends Model
     protected $fillable = [
         'user_id',
         'result_palette',
+        'ai_result',
         'input_data',
         'colors',
         'notes',
         'image_url',
-        'ai_result',
     ];
 
     protected $casts = [
+        'ai_result'  => 'array',
         'input_data' => 'array',
-        'colors' => 'array',
-        'ai_result' => 'array',
+        'colors'     => 'array',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }
